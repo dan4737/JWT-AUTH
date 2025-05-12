@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import appAssert from "../utils/appAssert";
 import AppErrorCode from "../constants/appErrorCode";
 import { UNAUTHORIZED } from "../constants/http";
-import { verifyToken } from "../utils/jwt";
+import { verifyToken, AccessTokenPayload } from "../utils/jwt";
 
 // wrap with catchErrors() if you need this to be async
 const authenticate: RequestHandler = (req, res, next) => {
@@ -14,7 +14,7 @@ const authenticate: RequestHandler = (req, res, next) => {
     AppErrorCode.InvalidAccessToken
   );
 
-  const { error, payload } = verifyToken(accessToken);
+  const { error, payload } = verifyToken<AccessTokenPayload>(accessToken);
   appAssert(
     payload,
     UNAUTHORIZED,
