@@ -44,7 +44,7 @@ const Register = () => {
         <Box rounded="lg" bg="gray.700" boxShadow="lg" p={8}>
           {isError && (
             <Box mb={3} color="red.400">
-              {JSON.stringify(error) || "An error occurred"}
+              {error?.message || JSON.stringify(error) || "An error occurred"}
             </Box>
           )}
           <Stack spacing={4}>
