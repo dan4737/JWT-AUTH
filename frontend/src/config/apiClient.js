@@ -16,8 +16,12 @@ TokenRefreshClient.interceptors.response.use((response) => response.data);
 const API = axios.create(options);
 
 API.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    console.log('API Response Success:', response.config.url, response.data);
+    return response.data;
+  },
   async (error) => {
+    console.error('API Response Error:', error);
     const { config, response } = error;
     const { status, data } = response || {};
 
@@ -38,7 +42,16 @@ API.interceptors.response.use(
       }
     }
 
-    return Promise.reject({ status, ...data });
+    // If there's no response, it's likely a network error
+    if (!response) {
+      return Promise.reject({
+        status: 0,
+        message: 'Network error. Please check your connection.',
+        error: error.message
+      });
+    }
+
+    return Promise.reject({ status, message: data?.message, ...data });
   }
 );
 
